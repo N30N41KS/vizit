@@ -569,7 +569,7 @@
 
 async function fetchGeminiResponse(userText) {
     // Этот URL выведет список всех доступных тебе моделей
-    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    const listurl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
     
     try {
         const response = await fetch(listUrl);
