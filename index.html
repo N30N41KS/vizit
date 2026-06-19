@@ -514,7 +514,7 @@
 Отвечай кратко, вежливо, профессионально и на русском языке. Старайся позитивно выделять способности Ярослава.
 ВАЖНО: Отвечай простым текстом. КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО использовать Markdown-форматирование в виде звездочек (не используй символы ** или *). Не делай списки со звездочками.`;
 
-    const apiKey = "AQ.Ab8RN6JcRYsKyjqMj7FgpMhym6p-NfBk3fx7prKc5iw9B2ICow"; 
+    const apiKey = ""; 
 
     chatToggle.addEventListener('click', () => {
       isChatOpen = true;
@@ -567,23 +567,19 @@
       if (indicator) indicator.remove();
     }
 
-async function fetchGeminiResponse(userText) {
+    async function fetchGeminiResponse(userText) {
     const modelName = "gemini-3.5-flash";
-    const apiKey = "AQ.Ab8RN6LdZKQfJpLeaYkEELCUUrUzr9aUCZDrtIxhE9E3gMyi-A";
+    const apiKey = "AQ.Ab8RN6LdZKQfJpLeaYkEELCUUrUzr9aUCZDrtIxhE9E3gMyi-A"; 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
     
     try {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-           body: JSON.stringify({
-    contents: [
-        { 
-            role: "user",
-            parts: [{ text: "Ты — помощник Ярослава. Твои ответы всегда должны быть только на русском языке. Вот вопрос пользователя: " + userText }] 
-        }
-    ]
-})
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: userText }] }]
+            })
+        });
 
         const result = await response.json();
 
