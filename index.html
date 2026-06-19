@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Зяблов Ярослав | Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { transition: background-color 0.5s ease, color 0.5s ease; }
+    
+    #chat-messages::-webkit-scrollbar { width: 6px; }
+    #chat-messages::-webkit-scrollbar-track { background: transparent; }
+    #chat-messages::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+    
+    .typing-indicator span {
+      display: inline-block; width: 6px; height: 6px; background-color: #a855f7; border-radius: 50%;
+      animation: typing 1s infinite;
+    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typing {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+  </style>
+</head>
+<body id="body" class="min-h-screen bg-black text-gray-200 font-sans transition-colors duration-500 relative">
+
+  <canvas id="space-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-100 transition-colors duration-500"></canvas>
+
+  <div class="relative z-10">
+
+    <nav id="navbar" class="fixed top-0 w-full z-40 backdrop-blur-md border-b bg-black/70 border-gray-800 transition-colors duration-500">
+      <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-bold text-lg tracking-wider">
+          <i data-lucide="code-2" class="text-purple-500"></i>
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-indigo-500">
+            N30N41Ks
+          </span>
+        </div>
+        <button id="theme-toggle" class="p-2 rounded-full transition-all duration-300 bg-gray-900 hover:bg-gray-800 text-yellow-400" aria-label="Toggle Theme">
+          <i id="theme-icon" data-lucide="sun" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 pt-28 pb-20">
+      
+      <section class="transform transition-all duration-1000 translate-y-0 opacity-100 fade-in-section">
+        <div class="flex flex-col md:flex-row gap-8 items-start md:items-center">
+          <div class="flex-1 space-y-6">
+            <div>
+              <h1 class="text-4xl md:text-6xl font-extrabold mb-2 tracking-tight">Зяблов Ярослав</h1>
+              <p id="role-text" class="text-xl font-medium text-purple-400">Студент ИСП | Frontend/Backend Разработчик</p>
+            </div>
+            
+            <div class="flex flex-col gap-2">
+              <div id="edu-text" class="flex items-center gap-2 text-sm text-gray-400">
+                <i data-lucide="graduation-cap" class="text-purple-500 w-5 h-5"></i>
+                <span>КАИТ №20, 1 курс (ИСП)</span>
+              </div>
+              <div id="loc-text" class="flex items-center gap-2 text-sm text-gray-400">
+                <i data-lucide="map-pin" class="text-purple-500 w-5 h-5"></i>
+                <span>Москва, Россия</span>
+              </div>
+            </div>
+
+            <p id="about-text" class="text-base leading-relaxed text-gray-400">
+              Привет! Я студент 1-го (перехожу на 2-й) курса КАИТ №20 по специальности «Информационные системы и программирование». В данный момент активно изучаю веб-разработку и Python, а на втором курсе планирую погрузиться в C#. Люблю создавать интересные проекты и применять новые знания на практике.
+            </p>
+
+            <div class="flex flex-wrap gap-2 pt-2" id="skills-container">
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">Python</span>
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">HTML</span>
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">CSS</span>
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">JavaScript</span>
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">SQL</span>
+              <span class="skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400">В планах: C#</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div id="divider-1" class="w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-800 to-transparent"></div>
+
+      <section class="transform transition-all duration-1000 translate-y-0 opacity-100 fade-in-section" style="transition-delay: 200ms;">
+        <h2 class="text-2xl font-bold mb-8 flex items-center gap-2">
+          <i data-lucide="code-2" class="text-purple-500"></i>
+          Мои проекты
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="projects-container">
+          
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">История вольной борьбы</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Информационный SPA веб-сайт, посвященный истории развития вольной борьбы с интерактивными модальными окнами.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">HTML/CSS</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">JavaScript</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">SPA</span>
+              </div>
+              <a href="https://n30n41ks.github.io/sitevolbor/" target="_blank" class="project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400">
+                Смотреть проект <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">Магазин сборки ПК</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Мультистраничный e-commerce концепт магазина кастомной сборки ПК. Включает конфигуратор и корзину на LocalStorage.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">HTML</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">Vanilla JS</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">LocalStorage</span>
+              </div>
+              <a href="https://n30n41ks.github.io/webcfgpc/" target="_blank" class="project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400">
+                Смотреть проект <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">Бот-помощник (Ж/Д)</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Бот, интегрированный с нейросетью GigaChat для анализа жалоб. Использует FSM и SQLite для ведения статистики.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">Python</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">aiogram 3</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">GigaChat API</span>
+              </div>
+              <a href="http://t.me/CPPKHELP_BOT" target="_blank" class="project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400">
+                Смотреть проект <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">Web-App для бота</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Веб-интерфейс для Telegram-бота с динамическими темами, анимациями поезда и виброоткликом Haptic Feedback.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">Telegram API</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">UX/UI</span>
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">JS</span>
+              </div>
+              <a href="https://n30n41ks.github.io/cppk-webapp/" target="_blank" class="project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400">
+                Смотреть проект <i data-lucide="external-link" class="w-4 h-4"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)] opacity-70">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">Проект в разработке</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Место зарезервировано для будущего крутого проекта. Скоро здесь появится что-то интересное.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">Секрет</span>
+              </div>
+              <span class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 cursor-not-allowed">
+                Скоро...
+              </span>
+            </div>
+          </div>
+
+          <div class="project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)] opacity-70">
+            <div>
+              <h3 class="text-xl font-bold mb-3 group-hover:text-purple-500 transition-colors">Проект в разработке</h3>
+              <p class="project-desc text-sm mb-6 text-gray-400">Идеи уже генерируются, код скоро будет написан. Ожидайте обновления портфолио.</p>
+            </div>
+            <div>
+              <div class="flex flex-wrap gap-2 mb-6">
+                <span class="tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300">Секрет</span>
+              </div>
+              <span class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 cursor-not-allowed">
+                Скоро...
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <div id="divider-2" class="w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-800 to-transparent"></div>
+
+      <section class="transform transition-all duration-1000 translate-y-0 opacity-100 fade-in-section" style="transition-delay: 400ms;">
+        <div id="contacts-box" class="p-8 rounded-3xl border text-center bg-[#0a0a0a] border-gray-800">
+          <h2 class="text-2xl font-bold mb-4">Готов к сотрудничеству!</h2>
+          <p id="contacts-text" class="mb-8 max-w-lg mx-auto text-gray-400">
+            Если у вас есть вопросы, предложения по проектам или вы просто хотите пообщаться о программировании — смело пишите.
+          </p>
+          
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="https://t.me/N30N41Ks" target="_blank" class="flex items-center gap-2 px-6 py-3 rounded-xl border-2 transition-all duration-300 bg-transparent hover:bg-blue-500 hover:text-white border-blue-500/30 text-blue-500">
+              <i data-lucide="send" class="w-5 h-5"></i>
+              <span class="font-semibold">Telegram</span>
+            </a>
+            <a href="https://github.com/n30n41ks" target="_blank" class="flex items-center gap-2 px-6 py-3 rounded-xl border-2 transition-all duration-300 bg-transparent hover:bg-purple-600 hover:text-white border-purple-500/30 text-purple-500">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/>
+                <path d="M9 18c-4.51 2-5-2-7-2"/>
+              </svg>
+              <span class="font-semibold">GitHub</span>
+            </a>
+            <a href="mailto:zya1901@yandex.ru" target="_blank" class="flex items-center gap-2 px-6 py-3 rounded-xl border-2 transition-all duration-300 bg-transparent hover:bg-rose-500 hover:text-white border-rose-500/30 text-rose-500">
+              <i data-lucide="mail" class="w-5 h-5"></i>
+              <span class="font-semibold">Email</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer id="footer" class="py-8 text-center text-sm text-gray-500">
+      <p>© <span id="year"></span> Зяблов Ярослав. Все права защищены.</p>
+      <p class="mt-1">Сделано с любовью к кофе.</p>
+    </footer>
+
+  </div>
+
+  <button id="ai-chat-toggle" class="fixed bottom-6 right-6 p-4 bg-purple-600 hover:bg-purple-700 text-white rounded-full shadow-[0_0_15px_rgba(168,85,247,0.5)] transition-transform hover:scale-110 z-50">
+    <i data-lucide="sparkles" class="w-6 h-6"></i>
+  </button>
+
+  <div id="ai-chat-window" class="fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-[#111] border border-gray-700 rounded-2xl shadow-2xl flex-col hidden z-50 overflow-hidden transform transition-all duration-500">
+    
+    <div id="ai-chat-header" class="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center transition-colors duration-500">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">
+          <i data-lucide="bot" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <h3 id="ai-chat-title" class="text-white font-bold text-sm transition-colors duration-500">AI Помощник Ярослава</h3>
+          <p class="text-xs text-green-400">Онлайн</p>
+        </div>
+      </div>
+      <button id="ai-chat-close" class="text-gray-400 hover:text-white transition-colors duration-500">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div id="ai-chat-messages" class="p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-[#0a0a0a] transition-colors duration-500">
+      <div class="ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500">
+        Привет! Я цифровой помощник Ярослава. Спроси меня о его навыках или проектах (например, про WebApp или магазин ПК)!
+      </div>
+    </div>
+
+    <div id="ai-chat-input-area" class="p-3 bg-gray-800 border-t border-gray-700 transition-colors duration-500">
+      <form id="ai-chat-form" class="flex gap-2 relative">
+        <input type="text" id="ai-chat-input" placeholder="Задайте вопрос..." class="w-full bg-gray-900 text-white rounded-xl px-4 py-2 text-sm border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors duration-500" autocomplete="off">
+        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-xl transition-colors shrink-0">
+          <i data-lucide="send" class="w-4 h-4"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    let isDark = true;
+    const btnTheme = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const canvas = document.getElementById('space-canvas');
+    
+    const body = document.getElementById('body');
+    const navbar = document.getElementById('navbar');
+    const roleText = document.getElementById('role-text');
+    const eduText = document.getElementById('edu-text');
+    const locText = document.getElementById('loc-text');
+    const aboutText = document.getElementById('about-text');
+    const dividers = [document.getElementById('divider-1'), document.getElementById('divider-2')];
+    const contactsBox = document.getElementById('contacts-box');
+    const contactsText = document.getElementById('contacts-text');
+    const footer = document.getElementById('footer');
+    
+    const chatWindowTheme = document.getElementById('ai-chat-window');
+    const chatHeaderTheme = document.getElementById('ai-chat-header');
+    const chatTitleTheme = document.getElementById('ai-chat-title');
+    const chatCloseTheme = document.getElementById('ai-chat-close');
+    const chatMessagesTheme = document.getElementById('ai-chat-messages');
+    const chatInputAreaTheme = document.getElementById('ai-chat-input-area');
+    const chatInputTheme = document.getElementById('ai-chat-input');
+    
+    const skillChips = document.querySelectorAll('.skill-chip');
+    const projectCards = document.querySelectorAll('.project-card');
+    const projectDescs = document.querySelectorAll('.project-desc');
+    const tags = document.querySelectorAll('.tag');
+    const projectLinks = document.querySelectorAll('.project-link');
+
+    btnTheme.addEventListener('click', () => {
+      isDark = !isDark;
+      
+      if (isDark) {
+        themeIcon.setAttribute('data-lucide', 'sun');
+        btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-900 hover:bg-gray-800 text-yellow-400";
+        body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-black text-gray-200";
+        navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-black/70 border-gray-800";
+        roleText.className = "text-xl font-medium text-purple-400";
+        eduText.className = "flex items-center gap-2 text-sm text-gray-400";
+        locText.className = "flex items-center gap-2 text-sm text-gray-400";
+        aboutText.className = "text-base leading-relaxed text-gray-400";
+        dividers.forEach(d => d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-800 to-transparent");
+        contactsBox.className = "p-8 rounded-3xl border text-center bg-[#0a0a0a] border-gray-800";
+        contactsText.className = "mb-8 max-w-lg mx-auto text-gray-400";
+        footer.className = "py-8 text-center text-sm text-gray-500";
+
+        skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400");
+        projectCards.forEach(el => {
+          if(el.classList.contains('opacity-70')) {
+             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
+          } else {
+             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
+          }
+        });
+        projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-400");
+        tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300");
+        projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400");
+        
+        let baseChatWindowClassDark = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-[#111] border border-gray-700 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
+        let isChatHiddenDark = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
+        if (chatWindowTheme) chatWindowTheme.className = isChatHiddenDark ? baseChatWindowClassDark + " hidden" : baseChatWindowClassDark + " flex";
+        
+        if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center transition-colors duration-500";
+        if (chatTitleTheme) chatTitleTheme.className = "text-white font-bold text-sm transition-colors duration-500";
+        if (chatCloseTheme) chatCloseTheme.className = "text-gray-400 hover:text-white transition-colors duration-500";
+        if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-[#0a0a0a] transition-colors duration-500";
+        if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-gray-800 border-t border-gray-700 transition-colors duration-500";
+        if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-900 text-white rounded-xl px-4 py-2 text-sm border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors duration-500";
+        
+        document.querySelectorAll('.ai-msg').forEach(msg => {
+           msg.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
+        });
+        const typingInd = document.getElementById('typing-indicator');
+        if(typingInd) typingInd.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
+        
+      } else {
+        themeIcon.setAttribute('data-lucide', 'moon');
+        btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-100 hover:bg-gray-200 text-slate-700";
+        body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-[#f8f9fa] text-gray-800";
+        navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-white/70 border-gray-200 shadow-sm";
+        roleText.className = "text-xl font-medium text-purple-600";
+        eduText.className = "flex items-center gap-2 text-sm text-gray-500";
+        locText.className = "flex items-center gap-2 text-sm text-gray-500";
+        aboutText.className = "text-base leading-relaxed text-gray-600";
+        dividers.forEach(d => d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-300 to-transparent");
+        contactsBox.className = "p-8 rounded-3xl border text-center bg-white border-gray-200 shadow-sm";
+        contactsText.className = "mb-8 max-w-lg mx-auto text-gray-600";
+        footer.className = "py-8 text-center text-sm text-gray-400";
+
+        skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-white border border-gray-200 text-gray-700 shadow-sm hover:border-purple-500/50 hover:text-purple-600");
+        projectCards.forEach(el => {
+          if(el.classList.contains('opacity-70')) {
+             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
+          } else {
+             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
+          }
+        });
+        projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-600");
+        tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-600");
+        projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-700 hover:text-purple-600");
+        
+        let baseChatWindowClassLight = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
+        let isChatHiddenLight = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
+        if (chatWindowTheme) chatWindowTheme.className = isChatHiddenLight ? baseChatWindowClassLight + " hidden" : baseChatWindowClassLight + " flex";
+        
+        if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center transition-colors duration-500";
+        if (chatTitleTheme) chatTitleTheme.className = "text-gray-800 font-bold text-sm transition-colors duration-500";
+        if (chatCloseTheme) chatCloseTheme.className = "text-gray-500 hover:text-gray-800 transition-colors duration-500";
+        if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-gray-50 transition-colors duration-500";
+        if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-white border-t border-gray-200 transition-colors duration-500";
+        if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-100 text-gray-800 rounded-xl px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-purple-500 transition-colors duration-500";
+        
+        document.querySelectorAll('.ai-msg').forEach(msg => {
+           msg.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
+        });
+        const typingInd = document.getElementById('typing-indicator');
+        if(typingInd) typingInd.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
+        
+      }
+      lucide.createIcons();
+    });
+
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    const numStars = 150;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    for (let i = 0; i < numStars; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 2.5 + 0.8,
+        vx: Math.random() * 0.3 - 0.15,
+        vy: Math.random() * 1.0 + 0.3,
+        alpha: Math.random() * 0.8 + 0.2,
+        targetAlpha: Math.random() * 0.8 + 0.2,
+        isSpecial: Math.random() > 0.85
+      });
+    }
+
+    function renderCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2, canvas.height / 2, 0,
+        canvas.width / 2, canvas.height / 2, canvas.width / 1.2
+      );
+      
+      if (isDark) {
+        gradient.addColorStop(0, 'rgba(40, 10, 60, 0.15)');
+        gradient.addColorStop(1, 'transparent');
+      } else {
+        gradient.addColorStop(0, 'rgba(168, 85, 247, 0.05)');
+        gradient.addColorStop(1, 'transparent');
+      }
+      
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        
+        if (isDark) {
+            ctx.fillStyle = star.isSpecial ? '#a855f7' : '#ffffff';
+        } else {
+            ctx.fillStyle = star.isSpecial ? '#a855f7' : '#94a3b8';
+        }
+        
+        ctx.globalAlpha = star.alpha;
+        ctx.fill();
+
+        if (Math.random() < 0.05) star.targetAlpha = Math.random() * 0.8 + 0.2;
+        star.alpha += (star.targetAlpha - star.alpha) * 0.15;
+
+        star.y -= star.vy;
+        star.x += star.vx;
+
+        if (star.y < 0) { star.y = canvas.height; star.x = Math.random() * canvas.width; }
+        if (star.x < 0) star.x = canvas.width;
+        if (star.x > canvas.width) star.x = 0;
+      });
+      requestAnimationFrame(renderCanvas);
+    }
+    renderCanvas();
+
+    const chatToggle = document.getElementById('ai-chat-toggle');
+    const chatWindow = document.getElementById('ai-chat-window');
+    const chatClose = document.getElementById('ai-chat-close');
+    const chatForm = document.getElementById('ai-chat-form');
+    const chatInput = document.getElementById('ai-chat-input');
+    const chatMessages = document.getElementById('ai-chat-messages');
+    
+    let isChatOpen = false;
+
+    const systemPrompt = `Ты — дружелюбный AI-помощник на сайте-визитке студента Зяблова Ярослава.
+Ярослав учится на 1 курсе (переходит на 2-й) в КАИТ №20 по специальности "Информационные системы и программирование".
+Его навыки: Python, HTML, CSS, JavaScript, SQL. В планах изучить C#.
+
+Его проекты:
+1. Сайт-база данных "Зал Славы Вольной Борьбы" (WRESTLING.DB):
+   - Разработан на чистом HTML, Tailwind CSS и JavaScript.
+   - Реализована логика SPA (одностраничного приложения) для навигации без перезагрузки страниц.
+   - Современный интерфейс: AMOLED-тема, красные акценты, глитч-эффекты, использование Intersection Observer для плавной анимации контента при скролле (fade-in).
+   - Интерактивный UI: динамическое модальное окно с досье на борцов. JS анимирует прогресс-бары характеристик (Техника, Выносливость, Мощь).
+   - Отказоустойчивость: написана JS-функция, которая автоматически генерирует красивую SVG-аватарку с инициалами борца, если оригинальная фотография не загрузилась.
+2. Концепт магазина ПК "CyberCore":
+   - Полноценный мультистраничный проект на чистом HTML/CSS/Vanilla JS.
+   - UI/UX дизайн выполнен в современном стиле Material Design 3 (Glassmorphism, карточки, кастомные анимации пульсации и появления).
+   - Реализован умный конфигуратор с динамическим перерасчетом стоимости комплектующих.
+   - Взаимодействие с LocalStorage: данные корзины и система пользовательских отзывов с рейтингом (в виде звездочек) сохраняются в локальной памяти браузера.
+   - Написана логика фейковой оплаты заказа с имитацией задержки ответа от сервера банка и интерактивная База Знаний (Wiki) с модальными окнами.
+3. Telegram-бот помощник для Ж/Д инфраструктуры:
+   - Это серьезный проект на Python (библиотека aiogram 3, асинхронный код).
+   - Использует базу данных SQLite для хранения статистики пользователей (система рангов: от "Наблюдателя" до "Легенды Метрополитена") и статистики диспетчерских.
+   - ИНТЕГРАЦИЯ С ИИ: Бот использует API GigaChat (Сбер) для анализа текста жалобы пассажира, автоматического определения приоритета инцидента (КРИТИЧЕСКИЙ, СРЕДНИЙ, НИЗКИЙ, ОФФТОП) и формирования краткой выжимки (формализации) для диспетчера.
+   - Использует FSM (машину состояний) для сбора фото от пользователя.
+   - Заявки маршрутизируются в разные админ-группы (МЦД или Метро). Диспетчеры (админы) могут брать задачи в работу и закрывать их (через Inline-кнопки), после чего бот просит пользователя оценить работу от 1 до 5.
+4. Web-App интерфейс для этого бота:
+   - Написан на чистом HTML/CSS/JS с Telegram WebApp API.
+   - Адаптируется под цветовую тему Telegram клиента (светлая/темная).
+   - Реализован умный поиск станций с кастомным автодополнением (база из всех станций Метро и МЦД).
+   - Интерфейс меняет акцентный цвет страницы в зависимости от официального цвета выбранной линии метро или МЦД.
+   - Внимание к деталям (UX): реализована кастомная CSS-анимация. При нажатии "Отправить", кнопка отправки превращается в уезжающий поезд.
+   - Использован Haptic Feedback API: при отправке формы телефон вибрирует, имитируя стук колес поезда по рельсам через математически рассчитанные массивы таймингов в JS.
+
+Контакты: Telegram - @N30N41Ks, Почта - zya1901@yandex.ru.
+
+Твоя задача — отвечать на вопросы посетителей сайта о Ярославле, его навыках и проектах.
+Если спросят про сайт о борьбе, расскажи про SPA-архитектуру, стильный дизайн с Tailwind, анимированные графики в модальных окнах и систему умных SVG-заглушек для картинок.
+Если спросят про магазин ПК, подчеркни работу с LocalStorage для корзины и отзывов, умный конфигуратор и дизайн в стиле Material 3.
+Если спросят про бота для Ж/Д, расскажи подробно о том, что он написан на Python с aiogram, использует SQLite и интегрирован с нейросетью GigaChat для анализа текста.
+Если спросят про Web-App, обязательно упомяни крутые фишки: динамическую смену цвета линий, Haptic Feedback и анимацию уезжающего поезда со стуком колес! Это покажет креативность Ярослава.
+Отвечай кратко, вежливо, профессионально и на русском языке. Старайся позитивно выделять способности Ярослава.
+ВАЖНО: Отвечай простым текстом. КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО использовать Markdown-форматирование в виде звездочек (не используй символы ** или *). Не делай списки со звездочками.`;
+
+    const apiKey = ""; 
+
+    chatToggle.addEventListener('click', () => {
+      isChatOpen = true;
+      chatWindow.classList.remove('hidden');
+      chatWindow.classList.add('flex');
+      chatToggle.classList.add('hidden');
+    });
+
+    chatClose.addEventListener('click', () => {
+      isChatOpen = false;
+      chatWindow.classList.add('hidden');
+      chatWindow.classList.remove('flex');
+      chatToggle.classList.remove('hidden');
+    });
+
+    function appendMessage(text, isUser = false) {
+      const div = document.createElement('div');
+      
+      let cleanText = text.replace(/\*\*/g, '').replace(/\*/g, '');
+
+      if (isUser) {
+        div.className = "self-end bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm transition-colors duration-500";
+      } else {
+        if (isDark) {
+            div.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
+        } else {
+            div.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
+        }
+      }
+      div.textContent = cleanText;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showLoading() {
+      const div = document.createElement('div');
+      div.id = "typing-indicator";
+      if (isDark) {
+        div.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
+      } else {
+        div.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
+      }
+      div.innerHTML = "<span></span><span></span><span></span>";
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeLoading() {
+      const indicator = document.getElementById('typing-indicator');
+      if (indicator) indicator.remove();
+    }
+
+    async function fetchGeminiResponse(userText) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+      const payload = {
+        contents: [{ parts: [{ text: userText }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+      };
+
+      const delays = [1000, 2000, 4000, 8000, 16000];
+      
+      for (let i = 0; i < delays.length + 1; i++) {
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          
+          if (!response.ok) throw new Error('API Error');
+          const data = await response.json();
+          return data.candidates?.[0]?.content?.parts?.[0]?.text || "Извините, я не смог сформулировать ответ.";
+        } catch (error) {
+          if (i === delays.length) {
+            return "Связь с сервером прервалась. Пожалуйста, попробуйте спросить позже.";
+          }
+          await new Promise(res => setTimeout(res, delays[i]));
+        }
+      }
+    }
+
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = chatInput.value.trim();
+      if (!text) return;
+
+      appendMessage(text, true);
+      chatInput.value = '';
+      showLoading();
+
+      const aiResponse = await fetchGeminiResponse(text);
+      
+      removeLoading();
+      appendMessage(aiResponse, false);
+    });
+
+  </script>
+</body>
+</html>
