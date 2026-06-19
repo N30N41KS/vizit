@@ -567,32 +567,33 @@
       if (indicator) indicator.remove();
     }
 
-    async function fetchGeminiResponse(userText) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+async function fetchGeminiResponse(userText) {
+      // Исправил модель на рабочую gemini-1.5-flash
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
       const payload = {
         contents: [{ parts: [{ text: userText }] }],
         systemInstruction: { parts: [{ text: systemPrompt }] }
       };
-
-      const delays = [1000, 2000, 4000, 8000, 16000];
       
-      for (let i = 0; i < delays.length + 1; i++) {
-        try {
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          
-          if (!response.ok) throw new Error('API Error');
-          const data = await response.json();
-          return data.candidates?.[0]?.content?.parts?.[0]?.text || "Извините, я не смог сформулировать ответ.";
-        } catch (error) {
-          if (i === delays.length) {
-            return "Связь с сервером прервалась. Пожалуйста, попробуйте спросить позже.";
-          }
-          await new Promise(res => setTimeout(res, delays[i]));
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        const data = await response.json();
+        
+        // ВЫВОД В КОНСОЛЬ ДЛЯ ОТЛАДКИ
+        if (!response.ok) {
+            console.error("Ошибка API:", data);
+            return "Ошибка сервера: " + (data.error?.message || "неизвестная ошибка");
         }
+        
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Пустой ответ от ИИ.";
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        return "Ошибка сети. Проверьте консоль (F12).";
       }
     }
 
