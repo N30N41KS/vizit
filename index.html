@@ -576,10 +576,14 @@ async function fetchGeminiResponse(userText) {
         const response = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: userText }] }]
-            })
-        });
+           body: JSON.stringify({
+    contents: [
+        { 
+            role: "user",
+            parts: [{ text: "Ты — помощник Ярослава. Твои ответы всегда должны быть только на русском языке. Вот вопрос пользователя: " + userText }] 
+        }
+    ]
+})
 
         const result = await response.json();
 
