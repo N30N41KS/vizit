@@ -568,34 +568,21 @@
     }
 
 async function fetchGeminiResponse(userText) {
-      // Исправил модель на рабочую gemini-1.5-flash
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-      const payload = {
-        contents: [{ parts: [{ text: userText }] }],
-        systemInstruction: { parts: [{ text: systemPrompt }] }
-      };
-      
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        
+    // Этот URL выведет список всех доступных тебе моделей
+    const listUrl = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`;
+    
+    try {
+        const response = await fetch(listUrl);
         const data = await response.json();
+        console.log("Доступные модели:", data);
         
-        // ВЫВОД В КОНСОЛЬ ДЛЯ ОТЛАДКИ
-        if (!response.ok) {
-            console.error("Ошибка API:", data);
-            return "Ошибка сервера: " + (data.error?.message || "неизвестная ошибка");
-        }
-        
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || "Пустой ответ от ИИ.";
-      } catch (error) {
-        console.error("Fetch Error:", error);
-        return "Ошибка сети. Проверьте консоль (F12).";
-      }
+        // Посмотри в консоли (F12) список моделей.
+        // Если там нет gemini-1.5-flash, значит этот ключ его не поддерживает.
+        return "Список моделей выведен в консоль F12. Посмотри, что там есть.";
+    } catch (err) {
+        return "Ошибка доступа к API: " + err.message;
     }
+}
 
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
