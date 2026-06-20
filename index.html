@@ -6,29 +6,33 @@
   <title>Зяблов Ярослав | Portfolio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { transition: background-color 0.5s ease, color 0.5s ease; }
+    #ai-chat-messages::-webkit-scrollbar { width: 6px; }
+    #ai-chat-messages::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+  </style>
 </head>
 <body id="body" class="min-h-screen bg-black text-gray-200 font-sans transition-colors duration-500 relative">
+  <canvas id="space-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
-  <nav id="navbar" class="fixed top-0 w-full z-40 backdrop-blur-md border-b bg-black/70 border-gray-800 transition-colors duration-500">
-    <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2 font-bold text-lg tracking-wider">
-        <i data-lucide="code-2" class="text-purple-500"></i>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-500">N30N41Ks</span>
+  <div class="relative z-10">
+    <nav id="navbar" class="fixed top-0 w-full z-40 backdrop-blur-md border-b bg-black/70 border-gray-800">
+      <div class="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-2 font-bold text-lg"><i data-lucide="code-2" class="text-purple-500"></i> N30N41Ks</div>
+        <button id="theme-toggle" class="p-2 rounded-full bg-gray-900 hover:bg-gray-800 text-yellow-400"><i id="theme-icon" data-lucide="sun" class="w-5 h-5"></i></button>
       </div>
-      <button id="theme-toggle" class="p-2 rounded-full bg-gray-900 hover:bg-gray-800 text-yellow-400">
-        <i id="theme-icon" data-lucide="sun" class="w-5 h-5"></i>
-      </button>
-    </div>
-  </nav>
+    </nav>
 
-  <main class="max-w-4xl mx-auto px-4 pt-28 pb-20">
-    <h1 class="text-4xl md:text-6xl font-extrabold mb-2">Зяблов Ярослав</h1>
-    <p class="text-xl font-medium text-purple-400">Студент ИСП | Разработчик</p>
-    
+    <main class="max-w-4xl mx-auto px-4 pt-28 pb-20">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-2">Зяблов Ярослав</h1>
+      <p class="text-xl font-medium text-purple-400">Студент ИСП | Разработчик</p>
+      <p class="mt-4 text-gray-400 max-w-xl">Студент 1 курса КАИТ №20. Изучаю веб-разработку и Python. Создаю ботов и веб-сервисы.</p>
+    </main>
+
     <button id="ai-chat-toggle" class="fixed bottom-6 right-6 p-4 bg-purple-600 text-white rounded-full shadow-lg z-50">
       <i data-lucide="sparkles" class="w-6 h-6"></i>
     </button>
-  </main>
+  </div>
 
   <div id="ai-chat-window" class="fixed bottom-24 right-6 w-80 bg-[#111] border border-gray-700 rounded-2xl shadow-2xl hidden flex-col z-50">
     <div class="bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center">
@@ -36,9 +40,7 @@
       <button id="ai-chat-close" class="text-gray-400 hover:text-white">✕</button>
     </div>
     <div id="ai-chat-messages" class="p-4 h-64 overflow-y-auto flex flex-col gap-3">
-      <div class="self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none text-sm border border-gray-700">
-        Привет! Чем помочь?
-      </div>
+      <div class="self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none text-sm border border-gray-700">Привет! Чем помочь?</div>
     </div>
     <form id="ai-chat-form" class="p-3 bg-gray-800 border-t border-gray-700 flex gap-2">
       <input type="text" id="ai-chat-input" class="w-full bg-gray-900 text-white rounded-xl px-4 py-2 text-sm focus:outline-none" placeholder="Вопрос..." required>
@@ -49,22 +51,20 @@
   <script>
     lucide.createIcons();
     
+    // ИИ логика
     const apiKey = "AQ.Ab8RN6LdZKQfJpLeaYkEELCUUrUzr9aUCZDrtIxhE9E3gMyi-A"; 
     const modelName = "gemini-3.1-flash-lite";
 
-    async function fetchGeminiResponse(userText) {
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+    async function fetchGeminiResponse(text) {
         try {
-            const response = await fetch(url, {
+            const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ role: "user", parts: [{ text: "Ты — помощник Ярослава Зяблова. Пиши на русском. Вопрос: " + userText }] }]
-                })
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ contents: [{ parts: [{ text: "Ты — помощник Ярослава. Пиши кратко по-русски: " + text }] }] })
             });
-            const data = await response.json();
+            const data = await res.json();
             return data.candidates[0].content.parts[0].text;
-        } catch (e) { return "Ошибка сети."; }
+        } catch { return "Ошибка сети."; }
     }
 
     document.getElementById('ai-chat-form').addEventListener('submit', async (e) => {
@@ -73,10 +73,10 @@
         const text = input.value.trim();
         if (!text) return;
         
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'self-end bg-purple-600 text-white p-3 rounded-2xl text-sm';
-        msgDiv.textContent = text;
-        document.getElementById('ai-chat-messages').appendChild(msgDiv);
+        const msg = document.createElement('div');
+        msg.className = 'self-end bg-purple-600 text-white p-3 rounded-2xl text-sm';
+        msg.textContent = text;
+        document.getElementById('ai-chat-messages').appendChild(msg);
         input.value = '';
         
         const response = await fetchGeminiResponse(text);
@@ -88,7 +88,7 @@
 
     document.getElementById('ai-chat-toggle').addEventListener('click', () => document.getElementById('ai-chat-window').classList.toggle('hidden'));
     document.getElementById('ai-chat-close').addEventListener('click', () => document.getElementById('ai-chat-window').classList.add('hidden'));
-    
+
     document.getElementById('theme-toggle').addEventListener('click', () => {
         document.body.classList.toggle('bg-black');
         document.body.classList.toggle('bg-white');
