@@ -269,211 +269,227 @@
   </div>
 
   <script>
-    lucide.createIcons();
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    let isDark = true;
-    const btnTheme = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    const canvas = document.getElementById('space-canvas');
-    
-    const body = document.getElementById('body');
-    const navbar = document.getElementById('navbar');
-    const roleText = document.getElementById('role-text');
-    const eduText = document.getElementById('edu-text');
-    const locText = document.getElementById('loc-text');
-    const aboutText = document.getElementById('about-text');
-    const dividers = [document.getElementById('divider-1'), document.getElementById('divider-2')];
-    const contactsBox = document.getElementById('contacts-box');
-    const contactsText = document.getElementById('contacts-text');
-    const footer = document.getElementById('footer');
-    
-    const chatWindowTheme = document.getElementById('ai-chat-window');
-    const chatHeaderTheme = document.getElementById('ai-chat-header');
-    const chatTitleTheme = document.getElementById('ai-chat-title');
-    const chatCloseTheme = document.getElementById('ai-chat-close');
-    const chatMessagesTheme = document.getElementById('ai-chat-messages');
-    const chatInputAreaTheme = document.getElementById('ai-chat-input-area');
-    const chatInputTheme = document.getElementById('ai-chat-input');
-    
-    const skillChips = document.querySelectorAll('.skill-chip');
-    const projectCards = document.querySelectorAll('.project-card');
-    const projectDescs = document.querySelectorAll('.project-desc');
-    const tags = document.querySelectorAll('.tag');
-    const projectLinks = document.querySelectorAll('.project-link');
-
-    btnTheme.addEventListener('click', () => {
-      isDark = !isDark;
-      
-      if (isDark) {
-        themeIcon.setAttribute('data-lucide', 'sun');
-        btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-900 hover:bg-gray-800 text-yellow-400";
-        body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-black text-gray-200";
-        navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-black/70 border-gray-800";
-        roleText.className = "text-xl font-medium text-purple-400";
-        eduText.className = "flex items-center gap-2 text-sm text-gray-400";
-        locText.className = "flex items-center gap-2 text-sm text-gray-400";
-        aboutText.className = "text-base leading-relaxed text-gray-400";
-        dividers.forEach(d => d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-800 to-transparent");
-        contactsBox.className = "p-8 rounded-3xl border text-center bg-[#0a0a0a] border-gray-800";
-        contactsText.className = "mb-8 max-w-lg mx-auto text-gray-400";
-        footer.className = "py-8 text-center text-sm text-gray-500";
-
-        skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400");
-        projectCards.forEach(el => {
-          if(el.classList.contains('opacity-70')) {
-             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
-          } else {
-             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
-          }
-        });
-        projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-400");
-        tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300");
-        projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400");
-        
-        let baseChatWindowClassDark = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-[#111] border border-gray-700 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
-        let isChatHiddenDark = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
-        if (chatWindowTheme) chatWindowTheme.className = isChatHiddenDark ? baseChatWindowClassDark + " hidden" : baseChatWindowClassDark + " flex";
-        
-        if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center transition-colors duration-500";
-        if (chatTitleTheme) chatTitleTheme.className = "text-white font-bold text-sm transition-colors duration-500";
-        if (chatCloseTheme) chatCloseTheme.className = "text-gray-400 hover:text-white transition-colors duration-500";
-        if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-[#0a0a0a] transition-colors duration-500";
-        if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-gray-800 border-t border-gray-700 transition-colors duration-500";
-        if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-900 text-white rounded-xl px-4 py-2 text-sm border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors duration-500";
-        
-        document.querySelectorAll('.ai-msg').forEach(msg => {
-           msg.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
-        });
-        const typingInd = document.getElementById('typing-indicator');
-        if(typingInd) typingInd.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
-        
-      } else {
-        themeIcon.setAttribute('data-lucide', 'moon');
-        btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-100 hover:bg-gray-200 text-slate-700";
-        body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-[#f8f9fa] text-gray-800";
-        navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-white/70 border-gray-200 shadow-sm";
-        roleText.className = "text-xl font-medium text-purple-600";
-        eduText.className = "flex items-center gap-2 text-sm text-gray-500";
-        locText.className = "flex items-center gap-2 text-sm text-gray-500";
-        aboutText.className = "text-base leading-relaxed text-gray-600";
-        dividers.forEach(d => d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-300 to-transparent");
-        contactsBox.className = "p-8 rounded-3xl border text-center bg-white border-gray-200 shadow-sm";
-        contactsText.className = "mb-8 max-w-lg mx-auto text-gray-600";
-        footer.className = "py-8 text-center text-sm text-gray-400";
-
-        skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-white border border-gray-200 text-gray-700 shadow-sm hover:border-purple-500/50 hover:text-purple-600");
-        projectCards.forEach(el => {
-          if(el.classList.contains('opacity-70')) {
-             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
-          } else {
-             el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
-          }
-        });
-        projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-600");
-        tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-600");
-        projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-700 hover:text-purple-600");
-        
-        let baseChatWindowClassLight = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
-        let isChatHiddenLight = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
-        if (chatWindowTheme) chatWindowTheme.className = isChatHiddenLight ? baseChatWindowClassLight + " hidden" : baseChatWindowClassLight + " flex";
-        
-        if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center transition-colors duration-500";
-        if (chatTitleTheme) chatTitleTheme.className = "text-gray-800 font-bold text-sm transition-colors duration-500";
-        if (chatCloseTheme) chatCloseTheme.className = "text-gray-500 hover:text-gray-800 transition-colors duration-500";
-        if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-gray-50 transition-colors duration-500";
-        if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-white border-t border-gray-200 transition-colors duration-500";
-        if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-100 text-gray-800 rounded-xl px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-purple-500 transition-colors duration-500";
-        
-        document.querySelectorAll('.ai-msg').forEach(msg => {
-           msg.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
-        });
-        const typingInd = document.getElementById('typing-indicator');
-        if(typingInd) typingInd.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
-        
-      }
-      lucide.createIcons();
-    });
-
-    const ctx = canvas.getContext('2d');
-    let stars = [];
-    const numStars = 150;
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    for (let i = 0; i < numStars; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 2.5 + 0.8,
-        vx: Math.random() * 0.3 - 0.15,
-        vy: Math.random() * 1.0 + 0.3,
-        alpha: Math.random() * 0.8 + 0.2,
-        targetAlpha: Math.random() * 0.8 + 0.2,
-        isSpecial: Math.random() > 0.85
-      });
-    }
-
-    function renderCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, canvas.width / 1.2
-      );
-      
-      if (isDark) {
-        gradient.addColorStop(0, 'rgba(40, 10, 60, 0.15)');
-        gradient.addColorStop(1, 'transparent');
-      } else {
-        gradient.addColorStop(0, 'rgba(168, 85, 247, 0.05)');
-        gradient.addColorStop(1, 'transparent');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Защищаем инициализацию иконок от падений
+      try {
+        lucide.createIcons();
+      } catch (e) {
+        console.warn("Lucide icons failed to load:", e);
       }
       
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const yearEl = document.getElementById('year');
+      if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-      stars.forEach(star => {
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-        
-        if (isDark) {
-            ctx.fillStyle = star.isSpecial ? '#a855f7' : '#ffffff';
-        } else {
-            ctx.fillStyle = star.isSpecial ? '#a855f7' : '#94a3b8';
+      let isDark = true;
+      const btnTheme = document.getElementById('theme-toggle');
+      const canvas = document.getElementById('space-canvas');
+      
+      const body = document.getElementById('body');
+      const navbar = document.getElementById('navbar');
+      const roleText = document.getElementById('role-text');
+      const eduText = document.getElementById('edu-text');
+      const locText = document.getElementById('loc-text');
+      const aboutText = document.getElementById('about-text');
+      const dividers = [document.getElementById('divider-1'), document.getElementById('divider-2')];
+      const contactsBox = document.getElementById('contacts-box');
+      const contactsText = document.getElementById('contacts-text');
+      const footer = document.getElementById('footer');
+      
+      const chatWindowTheme = document.getElementById('ai-chat-window');
+      const chatHeaderTheme = document.getElementById('ai-chat-header');
+      const chatTitleTheme = document.getElementById('ai-chat-title');
+      const chatCloseTheme = document.getElementById('ai-chat-close');
+      const chatMessagesTheme = document.getElementById('ai-chat-messages');
+      const chatInputAreaTheme = document.getElementById('ai-chat-input-area');
+      const chatInputTheme = document.getElementById('ai-chat-input');
+      
+      const skillChips = document.querySelectorAll('.skill-chip');
+      const projectCards = document.querySelectorAll('.project-card');
+      const projectDescs = document.querySelectorAll('.project-desc');
+      const tags = document.querySelectorAll('.tag');
+      const projectLinks = document.querySelectorAll('.project-link');
+
+      if (btnTheme) {
+        btnTheme.addEventListener('click', () => {
+          isDark = !isDark;
+          
+          if (isDark) {
+            // Пересоздаем иконку заново
+            btnTheme.innerHTML = '<i data-lucide="sun" class="w-5 h-5"></i>';
+            btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-900 hover:bg-gray-800 text-yellow-400";
+            body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-black text-gray-200";
+            navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-black/70 border-gray-800";
+            roleText.className = "text-xl font-medium text-purple-400";
+            eduText.className = "flex items-center gap-2 text-sm text-gray-400";
+            locText.className = "flex items-center gap-2 text-sm text-gray-400";
+            aboutText.className = "text-base leading-relaxed text-gray-400";
+            dividers.forEach(d => { if(d) d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-800 to-transparent"; });
+            contactsBox.className = "p-8 rounded-3xl border text-center bg-[#0a0a0a] border-gray-800";
+            contactsText.className = "mb-8 max-w-lg mx-auto text-gray-400";
+            footer.className = "py-8 text-center text-sm text-gray-500";
+
+            skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-[#111111] border border-gray-800 text-gray-300 hover:border-purple-500/50 hover:text-purple-400");
+            projectCards.forEach(el => {
+              if(el.classList.contains('opacity-70')) {
+                 el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
+              } else {
+                 el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-[#0a0a0a] border-gray-800 hover:border-purple-500/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.1)]";
+              }
+            });
+            projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-400");
+            tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-900 text-gray-300");
+            projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-300 hover:text-purple-400");
+            
+            let baseChatWindowClassDark = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-[#111] border border-gray-700 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
+            let isChatHiddenDark = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
+            if (chatWindowTheme) chatWindowTheme.className = isChatHiddenDark ? baseChatWindowClassDark + " hidden" : baseChatWindowClassDark + " flex";
+            
+            if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-800 p-4 border-b border-gray-700 flex justify-between items-center transition-colors duration-500";
+            if (chatTitleTheme) chatTitleTheme.className = "text-white font-bold text-sm transition-colors duration-500";
+            if (chatCloseTheme) chatCloseTheme.className = "text-gray-400 hover:text-white transition-colors duration-500";
+            if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-[#0a0a0a] transition-colors duration-500";
+            if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-gray-800 border-t border-gray-700 transition-colors duration-500";
+            if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-900 text-white rounded-xl px-4 py-2 text-sm border border-gray-700 focus:outline-none focus:border-purple-500 transition-colors duration-500";
+            
+            document.querySelectorAll('.ai-msg').forEach(msg => {
+               msg.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
+            });
+            const typingInd = document.getElementById('typing-indicator');
+            if(typingInd) typingInd.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
+            
+          } else {
+            // Пересоздаем иконку заново
+            btnTheme.innerHTML = '<i data-lucide="moon" class="w-5 h-5"></i>';
+            btnTheme.className = "p-2 rounded-full transition-all duration-300 bg-gray-100 hover:bg-gray-200 text-slate-700";
+            body.className = "min-h-screen font-sans transition-colors duration-500 relative bg-[#f8f9fa] text-gray-800";
+            navbar.className = "fixed top-0 w-full z-40 backdrop-blur-md border-b transition-colors duration-500 bg-white/70 border-gray-200 shadow-sm";
+            roleText.className = "text-xl font-medium text-purple-600";
+            eduText.className = "flex items-center gap-2 text-sm text-gray-500";
+            locText.className = "flex items-center gap-2 text-sm text-gray-500";
+            aboutText.className = "text-base leading-relaxed text-gray-600";
+            dividers.forEach(d => { if(d) d.className = "w-full h-px my-12 bg-gradient-to-r from-transparent via-gray-300 to-transparent"; });
+            contactsBox.className = "p-8 rounded-3xl border text-center bg-white border-gray-200 shadow-sm";
+            contactsText.className = "mb-8 max-w-lg mx-auto text-gray-600";
+            footer.className = "py-8 text-center text-sm text-gray-400";
+
+            skillChips.forEach(el => el.className = "skill-chip px-3 py-1 text-sm rounded-full font-medium transition-colors bg-white border border-gray-200 text-gray-700 shadow-sm hover:border-purple-500/50 hover:text-purple-600");
+            projectCards.forEach(el => {
+              if(el.classList.contains('opacity-70')) {
+                 el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 opacity-70 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
+              } else {
+                 el.className = "project-card group flex flex-col justify-between p-6 rounded-2xl border transition-all duration-300 bg-white border-gray-200 shadow-sm hover:border-purple-400 hover:shadow-lg";
+              }
+            });
+            projectDescs.forEach(el => el.className = "project-desc text-sm mb-6 text-gray-600");
+            tags.forEach(el => el.className = "tag text-xs px-2 py-1 rounded-md bg-gray-100 text-gray-600");
+            projectLinks.forEach(el => el.className = "project-link inline-flex items-center gap-2 text-sm font-semibold transition-colors text-gray-700 hover:text-purple-600");
+            
+            let baseChatWindowClassLight = "fixed bottom-24 right-6 w-[90vw] sm:w-96 bg-white border border-gray-200 rounded-2xl shadow-2xl flex-col z-50 overflow-hidden transform transition-all duration-500";
+            let isChatHiddenLight = chatWindowTheme && chatWindowTheme.classList.contains('hidden');
+            if (chatWindowTheme) chatWindowTheme.className = isChatHiddenLight ? baseChatWindowClassLight + " hidden" : baseChatWindowClassLight + " flex";
+            
+            if (chatHeaderTheme) chatHeaderTheme.className = "bg-gray-100 p-4 border-b border-gray-200 flex justify-between items-center transition-colors duration-500";
+            if (chatTitleTheme) chatTitleTheme.className = "text-gray-800 font-bold text-sm transition-colors duration-500";
+            if (chatCloseTheme) chatCloseTheme.className = "text-gray-500 hover:text-gray-800 transition-colors duration-500";
+            if (chatMessagesTheme) chatMessagesTheme.className = "p-4 h-80 overflow-y-auto flex flex-col gap-3 bg-gray-50 transition-colors duration-500";
+            if (chatInputAreaTheme) chatInputAreaTheme.className = "p-3 bg-white border-t border-gray-200 transition-colors duration-500";
+            if (chatInputTheme) chatInputTheme.className = "w-full bg-gray-100 text-gray-800 rounded-xl px-4 py-2 text-sm border border-gray-300 focus:outline-none focus:border-purple-500 transition-colors duration-500";
+            
+            document.querySelectorAll('.ai-msg').forEach(msg => {
+               msg.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
+            });
+            const typingInd = document.getElementById('typing-indicator');
+            if(typingInd) typingInd.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
+            
+          }
+          
+          try {
+            lucide.createIcons();
+          } catch (e) {}
+        });
+      }
+
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        const numStars = 150;
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
         }
-        
-        ctx.globalAlpha = star.alpha;
-        ctx.fill();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        if (Math.random() < 0.05) star.targetAlpha = Math.random() * 0.8 + 0.2;
-        star.alpha += (star.targetAlpha - star.alpha) * 0.15;
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2.5 + 0.8,
+            vx: Math.random() * 0.3 - 0.15,
+            vy: Math.random() * 1.0 + 0.3,
+            alpha: Math.random() * 0.8 + 0.2,
+            targetAlpha: Math.random() * 0.8 + 0.2,
+            isSpecial: Math.random() > 0.85
+          });
+        }
 
-        star.y -= star.vy;
-        star.x += star.vx;
+        function renderCanvas() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const gradient = ctx.createRadialGradient(
+            canvas.width / 2, canvas.height / 2, 0,
+            canvas.width / 2, canvas.height / 2, canvas.width / 1.2
+          );
+          
+          if (isDark) {
+            gradient.addColorStop(0, 'rgba(40, 10, 60, 0.15)');
+            gradient.addColorStop(1, 'transparent');
+          } else {
+            gradient.addColorStop(0, 'rgba(168, 85, 247, 0.05)');
+            gradient.addColorStop(1, 'transparent');
+          }
+          
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        if (star.y < 0) { star.y = canvas.height; star.x = Math.random() * canvas.width; }
-        if (star.x < 0) star.x = canvas.width;
-        if (star.x > canvas.width) star.x = 0;
-      });
-      requestAnimationFrame(renderCanvas);
-    }
-    renderCanvas();
+          stars.forEach(star => {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            
+            if (isDark) {
+                ctx.fillStyle = star.isSpecial ? '#a855f7' : '#ffffff';
+            } else {
+                ctx.fillStyle = star.isSpecial ? '#a855f7' : '#94a3b8';
+            }
+            
+            ctx.globalAlpha = star.alpha;
+            ctx.fill();
 
-    const chatToggle = document.getElementById('ai-chat-toggle');
-    const chatWindow = document.getElementById('ai-chat-window');
-    const chatClose = document.getElementById('ai-chat-close');
-    const chatForm = document.getElementById('ai-chat-form');
-    const chatInput = document.getElementById('ai-chat-input');
-    const chatMessages = document.getElementById('ai-chat-messages');
-    
-    let isChatOpen = false;
+            if (Math.random() < 0.05) star.targetAlpha = Math.random() * 0.8 + 0.2;
+            star.alpha += (star.targetAlpha - star.alpha) * 0.15;
 
-    const systemPrompt = `Ты — дружелюбный AI-помощник на сайте-визитке студента Зяблова Ярослава.
+            star.y -= star.vy;
+            star.x += star.vx;
+
+            if (star.y < 0) { star.y = canvas.height; star.x = Math.random() * canvas.width; }
+            if (star.x < 0) star.x = canvas.width;
+            if (star.x > canvas.width) star.x = 0;
+          });
+          requestAnimationFrame(renderCanvas);
+        }
+        renderCanvas();
+      }
+
+      const chatToggle = document.getElementById('ai-chat-toggle');
+      const chatWindow = document.getElementById('ai-chat-window');
+      const chatClose = document.getElementById('ai-chat-close');
+      const chatForm = document.getElementById('ai-chat-form');
+      const chatInput = document.getElementById('ai-chat-input');
+      const chatMessages = document.getElementById('ai-chat-messages');
+      
+      let isChatOpen = false;
+
+      const systemPrompt = `Ты — дружелюбный AI-помощник на сайте-визитке студента Зяблова Ярослава.
 Ярослав учится на 1 курсе (переходит на 2-й) в КАИТ №20 по специальности "Информационные системы и программирование".
 Его навыки: Python, HTML, CSS, JavaScript, SQL. В планах изучить C#.
 
@@ -514,105 +530,111 @@
 Отвечай кратко, вежливо, профессионально и на русском языке. Старайся позитивно выделять способности Ярослава.
 ВАЖНО: Отвечай простым текстом. КАТЕГОРИЧЕСКИ ЗАПРЕЩЕНО использовать Markdown-форматирование в виде звездочек (не используй символы ** или *). Не делай списки со звездочками.`;
 
-    const apiKey = ""; 
+      const apiKey = ""; 
 
-    chatToggle.addEventListener('click', () => {
-      isChatOpen = true;
-      chatWindow.classList.remove('hidden');
-      chatWindow.classList.add('flex');
-      chatToggle.classList.add('hidden');
-    });
-
-    chatClose.addEventListener('click', () => {
-      isChatOpen = false;
-      chatWindow.classList.add('hidden');
-      chatWindow.classList.remove('flex');
-      chatToggle.classList.remove('hidden');
-    });
-
-    function appendMessage(text, isUser = false) {
-      const div = document.createElement('div');
-      
-      let cleanText = text.replace(/\*\*/g, '').replace(/\*/g, '');
-
-      if (isUser) {
-        div.className = "self-end bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm transition-colors duration-500";
-      } else {
-        if (isDark) {
-            div.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
-        } else {
-            div.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
-        }
-      }
-      div.textContent = cleanText;
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function showLoading() {
-      const div = document.createElement('div');
-      div.id = "typing-indicator";
-      if (isDark) {
-        div.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
-      } else {
-        div.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
-      }
-      div.innerHTML = "<span></span><span></span><span></span>";
-      chatMessages.appendChild(div);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function removeLoading() {
-      const indicator = document.getElementById('typing-indicator');
-      if (indicator) indicator.remove();
-    }
-
-    async function fetchGeminiResponse(userText) {
-    const modelName = "gemini-3.1-flash-lite";
-    const apiKey = "AQ.Ab8RN6LdZKQfJpLeaYkEELCUUrUzr9aUCZDrtIxhE9E3gMyi-A"; 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-    
-    try {
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                systemInstruction: {
-                    parts: [{ text: "Ты — дружелюбный AI-помощник на сайте-визитке Ярослава Зяблова. Ярослав — студент 1-го курса КАИТ №20 (специальность ИСП), начинающий разработчик (Python, HTML, CSS, JS, SQL). Он увлекается созданием Telegram-ботов, 3D-моделированием и веб-разработкой. Отвечай только на русском языке, будь вежливым и профессиональным." }]
-                },
-                contents: [{ parts: [{ text: userText }] }]
-            })
+      if (chatToggle && chatWindow && chatClose) {
+        chatToggle.addEventListener('click', () => {
+          isChatOpen = true;
+          chatWindow.classList.remove('hidden');
+          chatWindow.classList.add('flex');
+          chatToggle.classList.add('hidden');
         });
 
-        const result = await response.json();
+        chatClose.addEventListener('click', () => {
+          isChatOpen = false;
+          chatWindow.classList.add('hidden');
+          chatWindow.classList.remove('flex');
+          chatToggle.classList.remove('hidden');
+        });
+      }
 
-        if (!response.ok) {
-            console.error("API Error details:", result);
-            return `Ошибка: ${result.error?.message || 'Неизвестная ошибка'}`;
+      function appendMessage(text, isUser = false) {
+        if (!chatMessages) return;
+        const div = document.createElement('div');
+        
+        let cleanText = text.replace(/\*\*/g, '').replace(/\*/g, '');
+
+        if (isUser) {
+          div.className = "self-end bg-purple-600 text-white p-3 rounded-2xl rounded-tr-none max-w-[85%] text-sm transition-colors duration-500";
+        } else {
+          if (isDark) {
+              div.className = "ai-msg self-start bg-gray-800 text-gray-200 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-700 transition-colors duration-500";
+          } else {
+              div.className = "ai-msg self-start bg-white text-gray-800 p-3 rounded-2xl rounded-tl-none max-w-[85%] text-sm border border-gray-200 shadow-sm transition-colors duration-500";
+          }
         }
+        div.textContent = cleanText;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
 
-        return result.candidates[0].content.parts[0].text;
-    } catch (err) {
-        console.error("Network Error:", err);
-        return "Ошибка сети. Проверьте консоль F12.";
-    }
-}
+      function showLoading() {
+        if (!chatMessages) return;
+        const div = document.createElement('div');
+        div.id = "typing-indicator";
+        if (isDark) {
+          div.className = "self-start bg-gray-800 p-3 rounded-2xl rounded-tl-none border border-gray-700 typing-indicator transition-colors duration-500";
+        } else {
+          div.className = "self-start bg-white p-3 rounded-2xl rounded-tl-none border border-gray-200 shadow-sm typing-indicator transition-colors duration-500";
+        }
+        div.innerHTML = "<span></span><span></span><span></span>";
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
 
-    chatForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
+      function removeLoading() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) indicator.remove();
+      }
 
-      appendMessage(text, true);
-      chatInput.value = '';
-      showLoading();
+      async function fetchGeminiResponse(userText) {
+          const modelName = "gemini-3.1-flash-lite";
+          const apiKey = "AQ.Ab8RN6LdZKQfJpLeaYkEELCUUrUzr9aUCZDrtIxhE9E3gMyi-A"; 
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+          
+          try {
+              const response = await fetch(url, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                      systemInstruction: {
+                          parts: [{ text: "Ты — дружелюбный AI-помощник на сайте-визитке Ярослава Зяблова. Ярослав — студент 1-го курса КАИТ №20 (специальность ИСП), начинающий разработчик (Python, HTML, CSS, JS, SQL). Он увлекается созданием Telegram-ботов, 3D-моделированием и веб-разработкой. Отвечай только на русском языке, будь вежливым и профессиональным." }]
+                      },
+                      contents: [{ parts: [{ text: userText }] }]
+                  })
+              });
 
-      const aiResponse = await fetchGeminiResponse(text);
-      
-      removeLoading();
-      appendMessage(aiResponse, false);
+              const result = await response.json();
+
+              if (!response.ok) {
+                  console.error("API Error details:", result);
+                  return `Ошибка: ${result.error?.message || 'Неизвестная ошибка'}`;
+              }
+
+              return result.candidates[0].content.parts[0].text;
+          } catch (err) {
+              console.error("Network Error:", err);
+              return "Ошибка сети. Проверьте консоль F12.";
+          }
+      }
+
+      if (chatForm && chatInput) {
+        chatForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const text = chatInput.value.trim();
+          if (!text) return;
+
+          appendMessage(text, true);
+          chatInput.value = '';
+          showLoading();
+
+          const aiResponse = await fetchGeminiResponse(text);
+          
+          removeLoading();
+          appendMessage(aiResponse, false);
+        });
+      }
     });
-
   </script>
 </body>
 </html>
