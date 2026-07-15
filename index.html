@@ -547,9 +547,16 @@
         if (indicator) indicator.remove();
       }
 
-      // ОБНОВЛЕННАЯ ФУНКЦИЯ: Теперь работает безопасно через Pipedream и OpenRouter!
+     // ОБНОВЛЕННАЯ ФУНКЦИЯ: Работает через Pipedream + сохраняет контекст сессий!
       async function fetchGeminiResponse(userText) {
           const PIPEDREAM_URL = "https://eoeispwtrzqm597.m.pipedream.net"; 
+          
+          // Извлекаем или генерируем уникальный ID сессии для текущего браузера
+          let sessionId = localStorage.getItem("chat_session_id");
+          if (!sessionId) {
+              sessionId = "session_" + Math.random().toString(36).substring(2, 15) + "_" + Date.now();
+              localStorage.setItem("chat_session_id", sessionId);
+          }
           
           try {
               const response = await fetch(PIPEDREAM_URL, {
@@ -557,7 +564,8 @@
                   headers: { 
                       'Content-Type': 'application/json' 
                   },
-                  body: JSON.stringify({ text: userText }) 
+                  // Отправляем и сообщение, и ID сессии
+                  body: JSON.stringify({ text: userText, sessionId: sessionId }) 
               });
 
               const data = await response.json();
@@ -567,7 +575,7 @@
                   return "Ошибка на сервере-посреднике. Загляни в консоль (F12).";
               }
 
-              // Наш питоновский скрипт возвращает результат в поле "reply"
+              // Наш бэкенд возвращает результат в поле "reply"
               return data.reply || "Пришел пустой ответ от ИИ. Попробуй еще раз!";
               
           } catch (err) {
@@ -575,24 +583,3 @@
               return "Сервер ИИ сейчас отдыхает. Попробуй чуть позже!";
           }
       }
-
-      if (chatForm && chatInput) {
-        chatForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          const text = chatInput.value.trim();
-          if (!text) return;
-
-          appendMessage(text, true);
-          chatInput.value = '';
-          showLoading();
-
-          const aiResponse = await fetchGeminiResponse(text);
-          
-          removeLoading();
-          appendMessage(aiResponse, false);
-        });
-      }
-    });
-  </script>
-</body>
-</html>
